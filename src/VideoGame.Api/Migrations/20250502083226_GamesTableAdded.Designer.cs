@@ -11,8 +11,8 @@ using VideoGame.Api.Core;
 namespace VideoGame.Api.Migrations
 {
     [DbContext(typeof(VideoGameDbContext))]
-    [Migration("20250501125447_SeedVideos")]
-    partial class SeedVideos
+    [Migration("20250502083226_GamesTableAdded")]
+    partial class GamesTableAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace VideoGame.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("VideoGame.Api.Core.Entities.Video", b =>
+            modelBuilder.Entity("VideoGame.Api.Core.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -48,33 +48,7 @@ namespace VideoGame.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Videos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Developer = "Insomniac Games",
-                            Platform = "PS5",
-                            Publisher = "Sony Interactive Entertainment",
-                            Title = "Spider-Man 2"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Developer = "Nintendo EPD",
-                            Platform = "Nintendo Switch",
-                            Publisher = "Nintendo",
-                            Title = "The Legend of Zelda: Tears of the Kingdom"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Developer = "CD Projekt Red",
-                            Platform = "PC",
-                            Publisher = "CD Projekt",
-                            Title = "Cyberpunk 2077"
-                        });
+                    b.ToTable("Games");
                 });
 #pragma warning restore 612, 618
         }

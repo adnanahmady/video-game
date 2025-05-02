@@ -51,7 +51,7 @@ services:
     <<: *db_config
     user: root
     tmpfs:
-      - /var/opt/mssql/data:rw
+      - /var/opt/mssql:rw
 
   adminer:
     <<: *restart_policy

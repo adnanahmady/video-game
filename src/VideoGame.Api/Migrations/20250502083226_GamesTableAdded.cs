@@ -5,13 +5,13 @@
 namespace VideoGame.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class VideosTableAdded : Migration
+    public partial class GamesTableAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Videos",
+                name: "Games",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -23,7 +23,7 @@ namespace VideoGame.Api.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Videos", x => x.Id);
+                    table.PrimaryKey("PK_Games", x => x.Id);
                 });
         }
 
@@ -31,7 +31,7 @@ namespace VideoGame.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Videos");
+                name: "Games");
         }
     }
 }

@@ -1,0 +1,65 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+using VideoGame.Api.Core;
+
+namespace VideoGame.Functionals.Support;
+
+public class TestableWebApplicationFactory : WebApplicationFactory<Program>
+{
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseEnvironment("Testing");
+
+        LoadTestSettingFile(builder);
+
+        builder.ConfigureServices((c, services) =>
+        {
+            RemoveExistingDbContext(services);
+
+            AddDbContextWithTestConnectionString(c, services);
+
+            ApplyMigrationsBeforeTesting(services);
+        });
+    }
+
+    public T GetDbContext<T>() where T : DbContext => Services
+        .CreateScope().ServiceProvider.GetRequiredService<T>();
+
+    private void RemoveExistingDbContext(IServiceCollection services)
+    {
+        var descriptor = services.SingleOrDefault(
+            d => d.ServiceType == typeof(DbContextOptions<VideoGameDbContext>));
+
+        if (descriptor == null)
+        {
+            return;
+        }
+
+        services.Remove(descriptor);
+    }
+
+    private void AddDbContextWithTestConnectionString(
+        WebHostBuilderContext context,
+        IServiceCollection services)
+    {
+        var cs = context.Configuration["ConnectionStrings:Testing"];
+        services.AddDbContext<VideoGameDbContext>(o => o.UseSqlServer(cs));
+    }
+
+    private void ApplyMigrationsBeforeTesting(IServiceCollection services)
+    {
+        using var scope = services.BuildServiceProvider().CreateScope();
+        using var context = scope.ServiceProvider.GetRequiredService<VideoGameDbContext>();
+
+        context.Database.EnsureDeleted();
+        context.Database.Migrate();
+    }
+
+    private void LoadTestSettingFile(IWebHostBuilder builder) =>
+        builder.ConfigureAppConfiguration((c, config) => config.AddJsonFile(
+            "appsettings.Testing.json", optional: false, reloadOnChange: true));
+}

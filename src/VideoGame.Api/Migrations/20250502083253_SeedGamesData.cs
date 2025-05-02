@@ -7,13 +7,13 @@
 namespace VideoGame.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class SeedVideos : Migration
+    public partial class SeedGamesData : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.InsertData(
-                table: "Videos",
+                table: "Games",
                 columns: new[] { "Id", "Developer", "Platform", "Publisher", "Title" },
                 values: new object[,]
                 {
@@ -27,17 +27,17 @@ namespace VideoGame.Api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DeleteData(
-                table: "Videos",
+                table: "Games",
                 keyColumn: "Id",
                 keyValue: 1);
 
             migrationBuilder.DeleteData(
-                table: "Videos",
+                table: "Games",
                 keyColumn: "Id",
                 keyValue: 2);
 
             migrationBuilder.DeleteData(
-                table: "Videos",
+                table: "Games",
                 keyColumn: "Id",
                 keyValue: 3);
         }

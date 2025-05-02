@@ -21,7 +21,7 @@ namespace VideoGame.Api.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("VideoGame.Api.Core.Entities.Video", b =>
+            modelBuilder.Entity("VideoGame.Api.Core.Entities.Game", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,7 @@ namespace VideoGame.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Videos");
+                    b.ToTable("Games");
 
                     b.HasData(
                         new
