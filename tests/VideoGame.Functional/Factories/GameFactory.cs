@@ -2,7 +2,7 @@ using Bogus;
 
 using VideoGame.Api.Core.Entities;
 
-namespace VideoGame.Functionals.Factories;
+namespace VideoGame.Functional.Factories;
 
 public static class GameFactory
 {

@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
 
-namespace VideoGame.Api.Controllers.Api.V1;
+namespace VideoGame.Api.Controllers.Api.V1.Games;
 
+[Authorize]
+[Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
 public class ListGamesController(VideoGameDbContext context)

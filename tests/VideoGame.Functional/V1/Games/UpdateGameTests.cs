@@ -2,16 +2,14 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-using Bogus.Premium;
-
 using Shouldly;
 
-using VideoGame.Functionals.Factories;
-using VideoGame.Functionals.Support;
+using VideoGame.Functional.Factories;
+using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
 
-namespace VideoGame.Functionals.V1.Videos;
+namespace VideoGame.Functional.V1.Games;
 
 public class UpdateGameTests(
     TestableWebApplicationFactory factory,
@@ -20,25 +18,25 @@ public class UpdateGameTests(
     [Fact]
     public async Task GivenDataWhenCalledThenShouldReturnExpectedResponse()
     {
-         var game = GameFactory.Create();
-         Context.Games.Add(game);
-         await Context.SaveChangesAsync();
-         var url = @"api/v1/games/" + game.Id;
-         var data = new
-         {
-             title = "Video title",
-             developer = "John Doe",
-             platform = "Linux",
-             publisher = "John Doe"
-         };
+        var game = GameFactory.Create();
+        Context.Games.Add(game);
+        await Context.SaveChangesAsync();
+        var url = @"api/v1/games/" + game.Id;
+        var data = new
+        {
+            title = "Video title",
+            developer = "John Doe",
+            platform = "Linux",
+            publisher = "John Doe"
+        };
 
-         var response = await Client.PutAsJsonAsync(url, data);
-         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var response = await Client.PutAsJsonAsync(url, data);
+        var content = await response.Content.ReadFromJsonAsync<JsonElement>();
 
-         content.GetProperty("id").GetInt32().ShouldBe(game.Id);
-         content.GetProperty("title").GetString().ShouldBe(data.title);
-         content.GetProperty("platform").GetString().ShouldBe(data.platform);
-         content.GetProperty("publisher").GetString().ShouldBe(data.publisher);
+        content.GetProperty("id").GetInt32().ShouldBe(game.Id);
+        content.GetProperty("title").GetString().ShouldBe(data.title);
+        content.GetProperty("platform").GetString().ShouldBe(data.platform);
+        content.GetProperty("publisher").GetString().ShouldBe(data.publisher);
     }
 
     [Fact]

@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
 
-namespace VideoGame.Api.Controllers.Api.V1;
+namespace VideoGame.Api.Controllers.Api.V1.Games;
 
+[Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
 public class UpdateGameController(VideoGameDbContext context)

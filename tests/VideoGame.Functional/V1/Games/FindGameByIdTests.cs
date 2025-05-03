@@ -2,16 +2,14 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-using Bogus.Premium;
-
 using Shouldly;
 
-using VideoGame.Functionals.Factories;
-using VideoGame.Functionals.Support;
+using VideoGame.Functional.Factories;
+using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
 
-namespace VideoGame.Functionals.V1.Videos;
+namespace VideoGame.Functional.V1.Games;
 
 public class FindGameByIdTests(
     TestableWebApplicationFactory factory,
@@ -20,18 +18,18 @@ public class FindGameByIdTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenResponseShouldBeAsExpected()
     {
-        var video = GameFactory.Create();
-        Context.Games.Add(video);
+        var game = GameFactory.Create();
+        Context.Games.Add(game);
         await Context.SaveChangesAsync();
-        var url = @"api/v1/games/" + video.Id;
+        var url = @"api/v1/games/" + game.Id;
 
         var response = await Client.GetFromJsonAsync<JsonElement>(url);
 
-        response.GetProperty("id").GetInt32().ShouldBe(video.Id);
-        response.GetProperty("title").GetString().ShouldBe(video.Title);
-        response.GetProperty("developer").GetString().ShouldBe(video.Developer);
-        response.GetProperty("platform").GetString().ShouldBe(video.Platform);
-        response.GetProperty("publisher").GetString().ShouldBe(video.Publisher);
+        response.GetProperty("id").GetInt32().ShouldBe(game.Id);
+        response.GetProperty("title").GetString().ShouldBe(game.Title);
+        response.GetProperty("developer").GetString().ShouldBe(game.Developer);
+        response.GetProperty("platform").GetString().ShouldBe(game.Platform);
+        response.GetProperty("publisher").GetString().ShouldBe(game.Publisher);
     }
 
     [Fact]
@@ -47,10 +45,10 @@ public class FindGameByIdTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
-        var video = GameFactory.Create();
-        Context.Games.Add(video);
+        var game = GameFactory.Create();
+        Context.Games.Add(game);
         await Context.SaveChangesAsync();
-        var url = @"api/v1/games/" + video.Id;
+        var url = @"api/v1/games/" + game.Id;
 
         var response = await Client.GetAsync(url);
 

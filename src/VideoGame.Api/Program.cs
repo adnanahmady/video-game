@@ -1,22 +1,50 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using System.Text;
+using System.Text.Json;
+
+using FluentValidation;
+using FluentValidation.AspNetCore;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 using Scalar.AspNetCore;
 
-using VideoGame.Api.Core;
+using VideoGame.Api.Infrastructur.Auth;
+using VideoGame.Api.RequestForms;
+using VideoGame.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllers().AddJsonOptions(o =>
+{
+    o.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower;
+});
+builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
+builder.Services.AddValidatorsFromAssemblyContaining<UserFormValidator>();
 
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<VideoGameDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:Default"]);
-});
+DatabaseServiceRegisters.AddServices(builder);
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Auth:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Auth:Audience"],
+            ValidateLifetime = true,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Auth:Token"]!)),
+            ValidateIssuerSigningKey = true,
+        };
+    });
+ApplicationServiceRegisters.AddServices(builder.Services);
+
+builder.Services.AddScoped<IValidator<UserForm>, UserFormValidator>();
 
 var app = builder.Build();
 
@@ -27,7 +55,10 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+if (app.Environment.EnvironmentName != "Testing")
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 
@@ -35,4 +66,4 @@ app.MapControllers();
 
 app.Run();
 
-public partial class Program {}
+public partial class Program { }

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using VideoGame.Api.Core;
 
-namespace VideoGame.Functionals.Support;
+namespace VideoGame.Functional.Support;
 
 public class TestableWebApplicationFactory : WebApplicationFactory<Program>
 {
@@ -62,4 +63,15 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
     private void LoadTestSettingFile(IWebHostBuilder builder) =>
         builder.ConfigureAppConfiguration((c, config) => config.AddJsonFile(
             "appsettings.Testing.json", optional: false, reloadOnChange: true));
+
+    public WebApplicationFactory<Program> Authenticate() =>
+        WithWebHostBuilder(builder => builder.ConfigureServices(services => services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = "Test";
+                options.DefaultChallengeScheme = "Test";
+            }).AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+                "Test",
+                o => { }
+            )));
 }
