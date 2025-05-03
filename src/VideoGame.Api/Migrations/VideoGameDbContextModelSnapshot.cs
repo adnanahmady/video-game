@@ -46,7 +46,7 @@ namespace VideoGame.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Games");
+                    b.ToTable("Games", (string)null);
 
                     b.HasData(
                         new
@@ -91,7 +91,7 @@ namespace VideoGame.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 #pragma warning restore 612, 618
         }
