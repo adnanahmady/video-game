@@ -30,7 +30,7 @@ public class UpdateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await Client.PutAsJsonAsync(url, data);
+        var response = await AdminClient.PutAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
 
         content.GetProperty("id").GetInt32().ShouldBe(game.Id);
@@ -54,7 +54,7 @@ public class UpdateGameTests(
             publisher = game.Publisher
         };
 
-        var response = await Client.PutAsJsonAsync(url, data);
+        var response = await AdminClient.PutAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
@@ -74,7 +74,7 @@ public class UpdateGameTests(
             publisher = game.Publisher
         };
 
-        var response = await Client.PutAsJsonAsync(url, data);
+        var response = await AdminClient.PutAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructur.EntityConfigurations;
 
 namespace VideoGame.Api.Core;
 
@@ -9,10 +10,26 @@ public class VideoGameDbContext(DbContextOptions<VideoGameDbContext> options)
 {
     public DbSet<Game> Games => Set<Game>();
     public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+        modelBuilder.ApplyConfiguration(new UserConfiguration());
+
+        modelBuilder.Entity<Role>().HasData(
+            new Role()
+            {
+                Id = 1,
+                Name = "Admin"
+            },
+            new Role()
+            {
+                Id = 2,
+                Name = "User"
+            }
+        );
 
         modelBuilder.Entity<Game>().HasData(
             new Game()

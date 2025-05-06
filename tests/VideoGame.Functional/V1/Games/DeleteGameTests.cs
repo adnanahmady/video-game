@@ -18,7 +18,7 @@ public class DeleteGameTests(
     {
         var url = @"api/v1/games/9999999999999999";
 
-        var response = await Client.DeleteAsync(url);
+        var response = await AdminClient.DeleteAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
@@ -31,7 +31,7 @@ public class DeleteGameTests(
         await Context.SaveChangesAsync();
         var url = @"api/v1/games/" + game.Id;
 
-        var response = await Client.DeleteAsync(url);
+        var response = await AdminClient.DeleteAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
     }

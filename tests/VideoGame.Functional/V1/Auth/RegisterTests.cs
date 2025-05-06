@@ -78,7 +78,6 @@ public class RegisterTests(
 
         content.GetProperty("id").GetString().ShouldNotBeNullOrWhiteSpace();
         content.GetProperty("username").GetString().ShouldBe(data.username);
-        content.GetProperty("password_hash").GetString().ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]

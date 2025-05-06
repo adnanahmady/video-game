@@ -14,6 +14,7 @@ public class ListGamesController(VideoGameDbContext context)
     : ControllerBase
 {
     [HttpGet]
+    [Authorize]
     public ActionResult<IEnumerable<Game>> Get() =>
         Ok(context.Games.ToList());
 }

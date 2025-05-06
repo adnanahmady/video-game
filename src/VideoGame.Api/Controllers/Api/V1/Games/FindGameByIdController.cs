@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +14,7 @@ public class FindGameByIdController(VideoGameDbContext context)
     : ControllerBase
 {
     [HttpGet("{id:int}")]
+    [Authorize]
     public async Task<ActionResult<Game>> FindById(int id)
     {
         var video = await context.Games.FirstOrDefaultAsync(

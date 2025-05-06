@@ -1,3 +1,5 @@
+using System.Security.Claims;
+
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -48,7 +50,10 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         IServiceCollection services)
     {
         var cs = context.Configuration["ConnectionStrings:Testing"];
-        services.AddDbContext<VideoGameDbContext>(o => o.UseSqlServer(cs));
+        services.AddDbContext<VideoGameDbContext>(o => o.UseSqlServer(
+            cs,
+            opt => opt.EnableRetryOnFailure(5)
+        ));
     }
 
     private void ApplyMigrationsBeforeTesting(IServiceCollection services)
@@ -57,6 +62,7 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         using var context = scope.ServiceProvider.GetRequiredService<VideoGameDbContext>();
 
         context.Database.EnsureDeleted();
+        // context.Database.EnsureCreated();
         context.Database.Migrate();
     }
 
@@ -64,14 +70,13 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((c, config) => config.AddJsonFile(
             "appsettings.Testing.json", optional: false, reloadOnChange: true));
 
-    public WebApplicationFactory<Program> Authenticate() =>
+    public WebApplicationFactory<Program> Authenticate(string role) =>
         WithWebHostBuilder(builder => builder.ConfigureServices(services => services
             .AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = "Test";
                 options.DefaultChallengeScheme = "Test";
-            }).AddScheme<AuthenticationSchemeOptions, TestAuthHandler>(
+            }).AddScheme<TestAuthOptions, TestAuthHandler>(
                 "Test",
-                o => { }
-            )));
+                o => o.Role = role)));
 }

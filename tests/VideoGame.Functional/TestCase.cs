@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+
 using VideoGame.Api.Core;
 using VideoGame.Functional.Support;
 
@@ -7,19 +9,20 @@ namespace VideoGame.Functional;
 
 public class TestCase : IClassFixture<TestableWebApplicationFactory>
 {
-    protected HttpClient Client;
-    protected HttpClient Guest;
-    protected Action<string> Cw;
-    protected VideoGameDbContext Context;
+    protected Action<string> Write;
+    protected readonly VideoGameDbContext Context;
 
-    public TestCase(
+    protected readonly HttpClient Guest;
+    protected readonly HttpClient Client;
+    protected readonly HttpClient AdminClient;
+    protected TestCase(
         TestableWebApplicationFactory factory,
-        ITestOutputHelper output
-    )
+        ITestOutputHelper output)
     {
-        Client = factory.Authenticate().CreateClient();
         Guest = factory.CreateClient();
-        Cw = output.WriteLine;
+        Client = factory.Authenticate("User").CreateClient();
+        AdminClient = factory.Authenticate("Admin").CreateClient();
+        Write = output.WriteLine;
         Context = factory.GetDbContext<VideoGameDbContext>();
     }
 }

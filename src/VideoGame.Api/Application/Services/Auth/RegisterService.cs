@@ -10,7 +10,7 @@ namespace VideoGame.Api.Application.Services.Auth;
 
 public class RegisterService(VideoGameDbContext context) : IRegisterService
 {
-    public async Task<User?> RegisterAsync(UserForm form)
+    public async Task<object?> RegisterAsync(UserForm form)
     {
         if (await context.Users.AnyAsync(u => u.Username == form.Username))
         {
@@ -23,10 +23,11 @@ public class RegisterService(VideoGameDbContext context) : IRegisterService
 
         user.Username = form.Username;
         user.PasswordHash = hashedPassword;
+        user.Role = await context.Roles.SingleAsync(r => r.Name == "User");
 
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return user;
+        return new {Id = user.Id, Username = user.Username};
     }
 }

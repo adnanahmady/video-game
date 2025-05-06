@@ -19,7 +19,7 @@ public class LoginService(
 {
     public async Task<string?> LoginAsync(UserForm form)
     {
-        var user = await context.Users.SingleOrDefaultAsync(
+        var user = await context.Users.Include(u => u.Role).SingleOrDefaultAsync(
             u => u.Username == form.Username);
 
         if (user is null)
@@ -49,6 +49,7 @@ public class LoginService(
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
+            new Claim(ClaimTypes.Role, user.Role?.Name ?? "")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

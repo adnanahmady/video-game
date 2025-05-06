@@ -55,6 +55,7 @@ public class LoginTests(
     {
         var url = @"api/v1/login";
         var user = UserFactory.Create("John due", "SecretPassword");
+        user.Role = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
 
@@ -72,6 +73,7 @@ public class LoginTests(
     {
         var url = @"api/v1/login";
         var user = UserFactory.Create("John due", "SecretPassword");
+        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
         var data = new
@@ -90,12 +92,13 @@ public class LoginTests(
     public async Task GivenUsernameAndPasswordWhenCalledThenShouldRegister()
     {
         var url = @"api/v1/login";
-        var user = UserFactory.Create("John due", "SecretPassword");
+        var user = UserFactory.Create("John due2", "SecretPassword");
+        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
         var data = new
         {
-            username = "John due",
+            username = "John due2",
             password = "SecretPassword"
         };
 

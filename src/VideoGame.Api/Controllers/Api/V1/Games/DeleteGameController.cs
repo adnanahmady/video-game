@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,17 +14,17 @@ public class DeleteGameController(VideoGameDbContext context)
     : ControllerBase
 {
     [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Game>> Delete(int id)
     {
-        var video = await context.Games.FirstOrDefaultAsync(
-            g => g.Id == id);
+        var game = await context.Games.FirstOrDefaultAsync(g => g.Id == id);
 
-        if (video is null)
+        if (game is null)
         {
             return NotFound();
         }
 
-        context.Games.Remove(video);
+        context.Games.Remove(game);
         await context.SaveChangesAsync();
 
         return NoContent();

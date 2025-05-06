@@ -26,7 +26,7 @@ public class CreateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await Client.PostAsJsonAsync(url, data);
+        var response = await AdminClient.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
 
         content.GetProperty("id").GetInt32().ShouldBeGreaterThan(0);
@@ -48,7 +48,7 @@ public class CreateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await Client.PostAsJsonAsync(url, data);
+        var response = await AdminClient.PostAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }

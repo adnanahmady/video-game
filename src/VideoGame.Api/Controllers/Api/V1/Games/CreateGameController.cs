@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using VideoGame.Api.Core;
@@ -12,6 +13,7 @@ public class CreateGameController(VideoGameDbContext context)
     : ControllerBase
 {
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Game>> Create(Game @new)
     {
         if (@new is null)

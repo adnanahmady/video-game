@@ -12,6 +12,7 @@ x-backend: &backend_config
     - .:${PWD}
     - .backend/home/.nuget:/home/docker/.nuget
     - .backend/home/.aspnet:/home/docker/.aspnet
+    - .backend/home/.dotnet:/home/docker/.dotnet
   stdin_open: true
   tty: true
   environment:
@@ -51,7 +52,7 @@ services:
     <<: *db_config
     user: root
     tmpfs:
-      - /var/opt/mssql:rw
+      - /var/opt/mssql/data:rw
 
   adminer:
     <<: *restart_policy
@@ -73,7 +74,6 @@ services:
     environment:
       SQLPAD_ADMIN: ${SQLPAD_ADMIN:-admin@sqlpad.com}
       SQLPAD_ADMIN_PASSWORD: ${SQLPAD_ADMIN_PASSWORD:-secret}
-
 
 volumes:
   videoGameDB:
