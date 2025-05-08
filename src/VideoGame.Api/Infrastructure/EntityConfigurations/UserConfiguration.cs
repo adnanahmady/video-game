@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 using VideoGame.Api.Core.Entities;
 
-namespace VideoGame.Api.Infrastructur.EntityConfigurations;
+namespace VideoGame.Api.Infrastructure.EntityConfigurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

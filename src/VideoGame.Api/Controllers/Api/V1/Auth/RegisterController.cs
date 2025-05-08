@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 
 using VideoGame.Api.Core.Services.Auth;
-using VideoGame.Api.RequestForms;
+using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 

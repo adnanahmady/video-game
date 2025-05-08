@@ -1,37 +1,29 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure.RequestForms.Games;
+using VideoGame.Api.Infrastructure.Services;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 
 [Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
-public class UpdateGameController(VideoGameDbContext context)
-    : ControllerBase
+public class UpdateGameController(IGameWork gameWork) : ControllerBase
 {
     [HttpPut("{id:int}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Game>> Update(
-        int id, Game updated)
+        int id, UpdateGameForm form)
     {
-        var video = await context.Games.FirstOrDefaultAsync(g => g.Id == id);
+        var game = await gameWork.UpdateService.UpdateAsync(id, form);
 
-        if (video is null)
+        if (game is null)
         {
             return NotFound();
         }
 
-        video.Title = updated.Title;
-        video.Platform = updated.Platform;
-        video.Publisher = updated.Publisher;
-        video.Developer = updated.Developer;
-
-        await context.SaveChangesAsync();
-
-        return Ok(video);
+        return Ok(game);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Core.Services.Auth;
-using VideoGame.Api.RequestForms;
+using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
 namespace VideoGame.Api.Application.Services.Auth;
 
@@ -28,6 +28,6 @@ public class RegisterService(VideoGameDbContext context) : IRegisterService
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return new {Id = user.Id, Username = user.Username};
+        return new { Id = user.Id, Username = user.Username };
     }
 }

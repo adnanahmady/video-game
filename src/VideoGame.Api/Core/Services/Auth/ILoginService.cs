@@ -1,4 +1,4 @@
-using VideoGame.Api.RequestForms;
+using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
 namespace VideoGame.Api.Core.Services.Auth;
 

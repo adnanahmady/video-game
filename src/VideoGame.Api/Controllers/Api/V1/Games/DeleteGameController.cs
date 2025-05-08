@@ -1,31 +1,26 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure.Services;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 
 [Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
-public class DeleteGameController(VideoGameDbContext context)
-    : ControllerBase
+public class DeleteGameController(IGameWork gameWork) : ControllerBase
 {
     [HttpDelete("{id:int}")]
     [Authorize(Roles = "Admin")]
     public async Task<ActionResult<Game>> Delete(int id)
     {
-        var game = await context.Games.FirstOrDefaultAsync(g => g.Id == id);
+        var isDeleted = await gameWork.DeleteService.DeleteAsync(id);
 
-        if (game is null)
+        if (!isDeleted)
         {
             return NotFound();
         }
-
-        context.Games.Remove(game);
-        await context.SaveChangesAsync();
 
         return NoContent();
     }

@@ -9,7 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Core.Services.Auth;
-using VideoGame.Api.RequestForms;
+using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
 namespace VideoGame.Api.Application.Services.Auth;
 

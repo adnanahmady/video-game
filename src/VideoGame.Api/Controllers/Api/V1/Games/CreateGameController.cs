@@ -1,29 +1,24 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure.RequestForms.Games;
+using VideoGame.Api.Infrastructure.Services;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 
 [Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
-public class CreateGameController(VideoGameDbContext context)
+public class CreateGameController(IGameWork work)
     : ControllerBase
 {
     [HttpPost]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<Game>> Create(Game @new)
+    public async Task<ActionResult<Game>> Create(CreateGameForm form)
     {
-        if (@new is null)
-        {
-            return BadRequest();
-        }
+        var game = await work.CreateService.CreateAsync(form);
 
-        context.Games.Add(@new);
-        await context.SaveChangesAsync();
-
-        return Created(new Uri("/api/v1/games/" + @new.Id), @new);
+        return Created(new Uri("/api/v1/games/" + game.Id), game);
     }
 }

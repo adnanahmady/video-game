@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core.Entities;
-using VideoGame.Api.Infrastructur.EntityConfigurations;
+using VideoGame.Api.Infrastructure.EntityConfigurations;
 
 namespace VideoGame.Api.Core;
 

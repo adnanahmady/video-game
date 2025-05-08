@@ -1,30 +1,27 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
-using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure.Services;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 
 [Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
-public class FindGameByIdController(VideoGameDbContext context)
-    : ControllerBase
+public class ShowGameController(IGameWork gameWork) : ControllerBase
 {
     [HttpGet("{id:int}")]
     [Authorize]
     public async Task<ActionResult<Game>> FindById(int id)
     {
-        var video = await context.Games.FirstOrDefaultAsync(
-            v => v.Id == id);
+        var game = await gameWork.ShowService.ShowAsync(id);
 
-        if (video is null)
+        if (game is null)
         {
             return NotFound();
         }
 
-        return Ok(video);
+        return Ok(game);
     }
 }

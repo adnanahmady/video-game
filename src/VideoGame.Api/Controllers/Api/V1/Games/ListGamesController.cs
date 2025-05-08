@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure.Services;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 
@@ -10,11 +10,12 @@ namespace VideoGame.Api.Controllers.Api.V1.Games;
 [Tags("Games")]
 [Route("api/v1/games")]
 [ApiController]
-public class ListGamesController(VideoGameDbContext context)
+public class ListGamesController(IGameWork gameWork)
     : ControllerBase
 {
     [HttpGet]
     [Authorize]
-    public ActionResult<IEnumerable<Game>> Get() =>
-        Ok(context.Games.ToList());
+    public async Task<ActionResult<IEnumerable<Game>>> Get(int? pageNumber, int? pageSize) => Ok(
+        await gameWork.ListService.GetPaginatedAsync(pageNumber ?? 1, pageSize ?? 15)
+    );
 }

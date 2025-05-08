@@ -1,5 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
-
 using VideoGame.Api.Core;
 using VideoGame.Functional.Support;
 
