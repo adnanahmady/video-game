@@ -1,7 +1,6 @@
-using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
-namespace VideoGame.Api.Core.Services.Auth;
+namespace VideoGame.Api.Infrastructure.Services.Auth;
 
 public interface IRegisterService
 {

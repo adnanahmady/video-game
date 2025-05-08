@@ -1,23 +1,20 @@
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 using VideoGame.Api.Core;
+using VideoGame.Api.Core.Dtos;
 using VideoGame.Api.Core.Entities;
-using VideoGame.Api.Core.Services.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Services.Auth;
+using VideoGame.Api.Infrastructure.Support.Auth;
 
 namespace VideoGame.Api.Application.Services.Auth;
 
 public class LoginService(
     VideoGameDbContext context,
-    IConfiguration configuration) : ILoginService
+    ITokenGenerator tokenGenerator) : ILoginService
 {
-    public async Task<string?> LoginAsync(UserForm form)
+    public async Task<TokenResponseDto?> LoginAsync(UserForm form)
     {
         var user = await context.Users.Include(u => u.Role).SingleOrDefaultAsync(
             u => u.Username == form.Username);
@@ -38,34 +35,10 @@ public class LoginService(
             return null;
         }
 
-        var token = CreateToken(user);
-
-        return token;
-    }
-
-    private string CreateToken(User user)
-    {
-        var claims = new List<Claim>
+        return new()
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role?.Name ?? "")
+            AccessToken = tokenGenerator.CreateToken(user),
+            RefreshToken = await tokenGenerator.GenerateRefreshTokenAsync(user)
         };
-
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
-            configuration.GetValue<string>("Auth:Token")!
-        ));
-
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
-
-        var tokenDescriptor = new JwtSecurityToken(
-            issuer: configuration.GetValue<string>("Auth:Issuer"),
-            audience: configuration.GetValue<string>("Auth:Audience"),
-            claims: claims,
-            expires: DateTime.UtcNow.AddDays(1),
-            signingCredentials: credentials
-        );
-
-        return new JwtSecurityTokenHandler().WriteToken(tokenDescriptor);
     }
 }

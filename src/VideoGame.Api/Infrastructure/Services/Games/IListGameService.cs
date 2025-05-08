@@ -1,6 +1,6 @@
 using VideoGame.Api.Core.Entities;
 
-namespace VideoGame.Api.Infrastructure.Services;
+namespace VideoGame.Api.Infrastructure.Services.Games;
 
 public interface IListGameService
 {

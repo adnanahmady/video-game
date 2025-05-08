@@ -1,25 +1,28 @@
 using Microsoft.AspNetCore.Mvc;
 
-using VideoGame.Api.Core.Services.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Services.Auth;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 
 [Tags("Auth")]
 [Route("api/v1")]
 [ApiController]
-public class RegisterController(IRegisterService service) : ControllerBase
+public class RegisterController(IAuthWork authWork) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<ActionResult> Register(UserForm form)
     {
-        var user = await service.RegisterAsync(form);
+        var user = await authWork.RegisterService.RegisterAsync(form);
 
         if (user is null)
         {
             return BadRequest(new
             {
-                Message = "Username already exists"
+                errors = new Dictionary<string, string[]>()
+                {
+                    { nameof(UserForm.Username), new[] { "Username already exist!" } }
+                }
             });
         }
 

@@ -1,4 +1,4 @@
-namespace VideoGame.Api.Infrastructure.Services;
+namespace VideoGame.Api.Infrastructure.Services.Games;
 
 public interface IDeleteGameService
 {

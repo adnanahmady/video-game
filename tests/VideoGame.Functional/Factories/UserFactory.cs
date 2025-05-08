@@ -26,5 +26,13 @@ public static class UserFactory
                 f => new PasswordHasher<User>()
                     .HashPassword(new User(), password)
             )
+            .RuleFor(
+                u => u.RefreshToken,
+                f => f.Random.Hash(40)
+            )
+            .RuleFor(
+                u => u.RefreshTokenExpiryTime,
+                f => DateTime.UtcNow.AddDays(1)
+            )
             .Generate();
 }

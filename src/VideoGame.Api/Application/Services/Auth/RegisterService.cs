@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
-using VideoGame.Api.Core.Services.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Services.Auth;
 
 namespace VideoGame.Api.Application.Services.Auth;
 

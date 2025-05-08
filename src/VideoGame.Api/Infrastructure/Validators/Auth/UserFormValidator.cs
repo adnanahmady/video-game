@@ -1,8 +1,8 @@
 using FluentValidation;
 
-using VideoGame.Api.RequestForms;
+using VideoGame.Api.Infrastructure.RequestForms.Auth;
 
-namespace VideoGame.Api.Infrastructur.Auth;
+namespace VideoGame.Api.Infrastructure.Validators.Auth;
 
 public class UserFormValidator : AbstractValidator<UserForm>
 {

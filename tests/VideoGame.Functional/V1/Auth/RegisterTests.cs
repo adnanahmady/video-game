@@ -64,7 +64,7 @@ public class RegisterTests(
     }
 
     [Fact]
-    public async Task GivenDataWhenRegisteredSuccessfullyThenShouldReturnExpectedResponse()
+    public async Task GivenDataWhenRegisteredThenReturnExpectedFields()
     {
         var url = @"api/v1/register";
         var data = new

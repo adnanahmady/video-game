@@ -20,7 +20,7 @@ builder.Services.AddOpenApi();
 
 DatabaseServiceRegisters.AddServices(builder);
 AuthServiceRegisters.AddServices(builder.Configuration, builder.Services);
-ApplicationServiceRegisters.AddServices(builder.Services);
+AppSupportRegisters.AddServices(builder.Services);
 FormValidatorRegisters.AddServices(builder.Services);
 ServiceWorkRegisters.AddServices(builder.Services);
 
