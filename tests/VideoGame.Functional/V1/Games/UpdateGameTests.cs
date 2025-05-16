@@ -32,11 +32,12 @@ public class UpdateGameTests(
 
         var response = await AdminClient.PutAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var dataSection = content.GetProperty("data");
 
-        content.GetProperty("id").GetInt32().ShouldBe(game.Id);
-        content.GetProperty("title").GetString().ShouldBe(data.title);
-        content.GetProperty("platform").GetString().ShouldBe(data.platform);
-        content.GetProperty("publisher").GetString().ShouldBe(data.publisher);
+        dataSection.GetProperty("id").GetInt32().ShouldBe(game.Id);
+        dataSection.GetProperty("title").GetString().ShouldBe(data.title);
+        dataSection.GetProperty("platform").GetString().ShouldBe(data.platform);
+        dataSection.GetProperty("publisher").GetString().ShouldBe(data.publisher);
     }
 
     [Fact]

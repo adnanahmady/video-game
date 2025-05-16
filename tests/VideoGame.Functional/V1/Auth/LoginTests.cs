@@ -17,33 +17,33 @@ public class LoginTests(
 {
     public static IEnumerable<object[]> DataProviderForDataValidation()
     {
-        yield return new object[]
-        {
+        yield return
+        [
             new { username = "user", password = "pass" },
             "Password",
-            "Password must be at least 6 characters long.",
-        };
+            "Password must be at least 6 characters long."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new { username = "us", password = "SecretPassword" },
             "Username",
-            "Username must be between 3 and 60 characters long.",
-        };
+            "Username must be between 3 and 60 characters long."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new { password = "SecretPassword" },
             "Username",
-            "Username is required.",
-        };
+            "Username is required."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new { username = "John due" },
             "Password",
-            "Password is required.",
-        };
+            "Password is required."
+        ];
     }
 
     [Theory]
@@ -84,9 +84,10 @@ public class LoginTests(
 
         var response = await Guest.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var dataSection = content.GetProperty("data");
 
-        content.GetProperty("access_token").GetString().ShouldNotBeNullOrWhiteSpace();
-        content.GetProperty("refresh_token").GetString().ShouldNotBeNullOrWhiteSpace();
+        dataSection.GetProperty("access_token").GetString().ShouldNotBeNullOrWhiteSpace();
+        dataSection.GetProperty("refresh_token").GetString().ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]

@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
+using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Auth;
+using VideoGame.Api.Infrastructure.Support;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 
@@ -17,15 +20,12 @@ public class LoginController(IAuthWork authWork) : ControllerBase
 
         if (token is null)
         {
-            return BadRequest(new
-            {
-                errors = new Dictionary<string, string[]>()
-                {
-                    { nameof(UserForm.Username), new[] { "Username or Password is wrong!" } }
-                }
-            });
+            return BadRequest(new CustomError(
+                nameof(UserForm.Username),
+                "Username or Password is wrong!"
+            ));
         }
 
-        return Ok(token);
+        return Ok(new GeneralResource<TokenDto>(token));
     }
 }

@@ -28,12 +28,13 @@ public class CreateGameTests(
 
         var response = await AdminClient.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var dataSection = content.GetProperty("data");
 
-        content.GetProperty("id").GetInt32().ShouldBeGreaterThan(0);
-        content.GetProperty("title").GetString().ShouldBe(data.title);
-        content.GetProperty("developer").GetString().ShouldBe(data.developer);
-        content.GetProperty("platform").GetString().ShouldBe(data.platform);
-        content.GetProperty("publisher").GetString().ShouldBe(data.publisher);
+        dataSection.GetProperty("id").GetInt32().ShouldBeGreaterThan(0);
+        dataSection.GetProperty("title").GetString().ShouldBe(data.title);
+        dataSection.GetProperty("developer").GetString().ShouldBe(data.developer);
+        dataSection.GetProperty("platform").GetString().ShouldBe(data.platform);
+        dataSection.GetProperty("publisher").GetString().ShouldBe(data.publisher);
     }
 
     [Fact]

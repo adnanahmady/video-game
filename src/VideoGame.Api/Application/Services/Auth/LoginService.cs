@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
-using VideoGame.Api.Core.Dtos;
+using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
 using VideoGame.Api.Infrastructure.Services.Auth;
@@ -14,7 +14,7 @@ public class LoginService(
     VideoGameDbContext context,
     ITokenGenerator tokenGenerator) : ILoginService
 {
-    public async Task<TokenResponseDto?> LoginAsync(UserForm form)
+    public async Task<TokenDto?> LoginAsync(UserForm form)
     {
         var user = await context.Users.Include(u => u.Role).SingleOrDefaultAsync(
             u => u.Username == form.Username);

@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
+using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Auth;
+using VideoGame.Api.Infrastructure.Support;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 
@@ -15,6 +18,14 @@ public class RefreshTokenController(IAuthWork authWork) : ControllerBase
     {
         var token = await authWork.RefreshTokenService.RefreshAsync(form);
 
-        return Ok(token);
+        if (token is null)
+        {
+            return BadRequest(new CustomError(
+                nameof(RefreshTokenForm.RefreshToken),
+                "Refresh token is invalid."
+            ));
+        }
+
+        return Ok(new GeneralResource<TokenDto>(token));
     }
 }

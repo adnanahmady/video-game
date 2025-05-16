@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Games;
+using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Games;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
@@ -19,6 +20,7 @@ public class CreateGameController(IGameWork work)
     {
         var game = await work.CreateService.CreateAsync(form);
 
-        return Created(new Uri("/api/v1/games/" + game.Id), game);
+        return Created(new Uri("/api/v1/games/" + game.Id),
+            new GeneralResource<Game>(game));
     }
 }

@@ -7,7 +7,7 @@ namespace VideoGame.Functional;
 
 public class TestCase : IClassFixture<TestableWebApplicationFactory>
 {
-    protected Action<string> Write;
+    protected Action<string> Dump;
     protected readonly VideoGameDbContext Context;
 
     protected readonly HttpClient Guest;
@@ -20,7 +20,7 @@ public class TestCase : IClassFixture<TestableWebApplicationFactory>
         Guest = factory.CreateClient();
         Client = factory.Authenticate("User").CreateClient();
         AdminClient = factory.Authenticate("Admin").CreateClient();
-        Write = output.WriteLine;
+        Dump = output.WriteLine;
         Context = factory.GetDbContext<VideoGameDbContext>();
     }
 }

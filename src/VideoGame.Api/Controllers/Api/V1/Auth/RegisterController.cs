@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
+using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Auth;
+using VideoGame.Api.Infrastructure.Support;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 
@@ -17,15 +19,12 @@ public class RegisterController(IAuthWork authWork) : ControllerBase
 
         if (user is null)
         {
-            return BadRequest(new
-            {
-                errors = new Dictionary<string, string[]>()
-                {
-                    { nameof(UserForm.Username), new[] { "Username already exist!" } }
-                }
-            });
+            return BadRequest(new CustomError(
+                nameof(UserForm.Username),
+                "Username already exist!"
+            ));
         }
 
-        return Created("/api/v1/login", user);
+        return Created("/api/v1/login", new GeneralResource<object>(user));
     }
 }

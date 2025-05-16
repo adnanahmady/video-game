@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Games;
+using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Games;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
@@ -24,6 +25,6 @@ public class UpdateGameController(IGameWork gameWork) : ControllerBase
             return NotFound();
         }
 
-        return Ok(game);
+        return Ok(new GeneralResource<Game>(game));
     }
 }

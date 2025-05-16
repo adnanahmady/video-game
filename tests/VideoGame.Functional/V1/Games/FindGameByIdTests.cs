@@ -24,12 +24,13 @@ public class FindGameByIdTests(
         var url = @"api/v1/games/" + game.Id;
 
         var response = await Client.GetFromJsonAsync<JsonElement>(url);
+        var data = response.GetProperty("data");
 
-        response.GetProperty("id").GetInt32().ShouldBe(game.Id);
-        response.GetProperty("title").GetString().ShouldBe(game.Title);
-        response.GetProperty("developer").GetString().ShouldBe(game.Developer);
-        response.GetProperty("platform").GetString().ShouldBe(game.Platform);
-        response.GetProperty("publisher").GetString().ShouldBe(game.Publisher);
+        data.GetProperty("id").GetInt32().ShouldBe(game.Id);
+        data.GetProperty("title").GetString().ShouldBe(game.Title);
+        data.GetProperty("developer").GetString().ShouldBe(game.Developer);
+        data.GetProperty("platform").GetString().ShouldBe(game.Platform);
+        data.GetProperty("publisher").GetString().ShouldBe(game.Publisher);
     }
 
     [Fact]

@@ -18,41 +18,41 @@ public class RefreshTokenTests(
 {
     public static IEnumerable<object[]> DataProviderForDataValidation()
     {
-        yield return new object[]
-        {
+        yield return
+        [
             new Func<User, object>(user => new
             {
                 user_id = user.Id,
                 refresh_token = "pass"
             }),
             "RefreshToken",
-            "Refresh token is invalid or expired.",
-        };
+            "Refresh token is invalid or expired."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new Func<User, object>(user => new
             {
                 user_id = Guid.NewGuid().ToString(),
                 refresh_token = user.RefreshToken
             }),
             "UserId",
-            "Refresh token is invalid or expired.",
-        };
+            "Refresh token is invalid or expired."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new Func<User, object>(user => new { refresh_token = user.RefreshToken }),
             "UserId",
-            "UserId is required.",
-        };
+            "UserId is required."
+        ];
 
-        yield return new object[]
-        {
+        yield return
+        [
             new Func<User, object>(user => new { user_id = user.Id }),
             "RefreshToken",
-            "RefreshToken is required.",
-        };
+            "RefreshToken is required."
+        ];
     }
 
     [Theory]
@@ -94,9 +94,10 @@ public class RefreshTokenTests(
 
         var response = await Guest.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
+        var dataSection = content.GetProperty("data");
 
-        content.GetProperty("access_token").GetString().ShouldNotBeNullOrWhiteSpace();
-        content.GetProperty("refresh_token").GetString().ShouldNotBeNullOrWhiteSpace();
+        dataSection.GetProperty("access_token").GetString().ShouldNotBeNullOrWhiteSpace();
+        dataSection.GetProperty("refresh_token").GetString().ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]
