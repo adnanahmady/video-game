@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
+using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
 using VideoGame.Api.Infrastructure.Responses.Shared;
 using VideoGame.Api.Infrastructure.Services.Auth;
@@ -25,6 +26,9 @@ public class RegisterController(IAuthWork authWork) : ControllerBase
             ));
         }
 
-        return Created("/api/v1/login", new GeneralResource<object>(user));
+        return Created(
+            "/api/v1/login",
+            new GeneralResource<RegisteredUserDto>(user)
+        );
     }
 }

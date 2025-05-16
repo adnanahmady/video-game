@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
+using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
 using VideoGame.Api.Infrastructure.Services.Auth;
@@ -10,7 +11,7 @@ namespace VideoGame.Api.Application.Services.Auth;
 
 public class RegisterService(VideoGameDbContext context) : IRegisterService
 {
-    public async Task<object?> RegisterAsync(UserForm form)
+    public async Task<RegisteredUserDto?> RegisterAsync(UserForm form)
     {
         if (await context.Users.AnyAsync(u => u.Username == form.Username))
         {
@@ -28,6 +29,10 @@ public class RegisterService(VideoGameDbContext context) : IRegisterService
         context.Users.Add(user);
         await context.SaveChangesAsync();
 
-        return new { Id = user.Id, Username = user.Username };
+        return new()
+        {
+            Id = user.Id,
+            Username = user.Username
+        };
     }
 }

@@ -1,3 +1,5 @@
+using AutoMapper;
+
 using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
@@ -7,7 +9,7 @@ using VideoGame.Api.Infrastructure.Services.Games;
 
 namespace VideoGame.Api.Application.Services.Games;
 
-public class UpdateGameService(VideoGameDbContext context) : IUpdateGameService
+public class UpdateGameService(VideoGameDbContext context, IMapper mapper) : IUpdateGameService
 {
     public async Task<Game?> UpdateAsync(int id, UpdateGameForm form)
     {
@@ -23,10 +25,7 @@ public class UpdateGameService(VideoGameDbContext context) : IUpdateGameService
 
     public async Task<Game?> UpdateAsync(Game game, UpdateGameForm form)
     {
-        game.Title = form.Title;
-        game.Platform = form.Platform;
-        game.Publisher = form.Publisher;
-        game.Developer = form.Developer;
+        mapper.Map(form, game);
 
         await context.SaveChangesAsync();
 

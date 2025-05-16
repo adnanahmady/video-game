@@ -1,3 +1,5 @@
+using AutoMapper;
+
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
 using VideoGame.Api.Infrastructure.RequestForms.Games;
@@ -5,17 +7,11 @@ using VideoGame.Api.Infrastructure.Services.Games;
 
 namespace VideoGame.Api.Application.Services.Games;
 
-public class CreateGameService(VideoGameDbContext context) : ICreateGameService
+public class CreateGameService(VideoGameDbContext context, IMapper mapper) : ICreateGameService
 {
     public async Task<Game> CreateAsync(CreateGameForm form)
     {
-        var game = new Game()
-        {
-            Title = form.Title,
-            Platform = form.Platform,
-            Developer = form.Developer,
-            Publisher = form.Publisher
-        };
+        var game = mapper.Map<CreateGameForm, Game>(form);
 
         context.Games.Add(game);
         await context.SaveChangesAsync();

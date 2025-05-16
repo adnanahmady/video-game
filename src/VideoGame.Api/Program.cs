@@ -18,6 +18,8 @@ builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsi
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddAutoMapper(typeof(Program));
+
 DatabaseServiceRegisters.AddServices(builder);
 AuthServiceRegisters.AddServices(builder.Configuration, builder.Services);
 AppSupportRegisters.AddServices(builder.Services);
