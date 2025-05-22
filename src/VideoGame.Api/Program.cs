@@ -4,6 +4,8 @@ using FluentValidation.AspNetCore;
 
 using Scalar.AspNetCore;
 
+using VideoGame.Api.Core;
+using VideoGame.Api.Infrastructure;
 using VideoGame.Api.Settings;
 
 var builder = WebApplication.CreateBuilder(args);

@@ -1,6 +1,6 @@
 namespace VideoGame.Api.Core.Entities;
 
-public class Game
+public class Game : IEntity<int>
 {
     public int Id { get; set; }
     public required string Title { get; set; }

@@ -9,7 +9,7 @@ public class VideoGameDbContext(DbContextOptions<VideoGameDbContext> options)
     : DbContext(options)
 {
     public DbSet<Game> Games => Set<Game>();
-    public DbSet<User> Users => Set<User>();
+    public DbSet<User?> Users => Set<User>();
     public DbSet<Role> Roles => Set<Role>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

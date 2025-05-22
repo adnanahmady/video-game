@@ -4,16 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure;
 using VideoGame.Api.Infrastructure.RequestForms.Games;
 using VideoGame.Api.Infrastructure.Services.Games;
 
 namespace VideoGame.Api.Application.Services.Games;
 
-public class UpdateGameService(VideoGameDbContext context, IMapper mapper) : IUpdateGameService
+public class UpdateGameService(IUnitOfWork unitOfWork, IMapper mapper) : IUpdateGameService
 {
     public async Task<Game?> UpdateAsync(int id, UpdateGameForm form)
     {
-        var game = await context.Games.FirstOrDefaultAsync(g => g.Id == id);
+        var game = await unitOfWork.Games.FindByIdAsync(id);
 
         if (game is null)
         {
@@ -27,7 +28,7 @@ public class UpdateGameService(VideoGameDbContext context, IMapper mapper) : IUp
     {
         mapper.Map(form, game);
 
-        await context.SaveChangesAsync();
+        await unitOfWork.CommitAsync();
 
         return game;
     }

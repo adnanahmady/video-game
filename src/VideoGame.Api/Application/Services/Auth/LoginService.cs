@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using VideoGame.Api.Core;
 using VideoGame.Api.Core.Dtos.Auth;
 using VideoGame.Api.Core.Entities;
+using VideoGame.Api.Infrastructure;
 using VideoGame.Api.Infrastructure.RequestForms.Auth;
 using VideoGame.Api.Infrastructure.Services.Auth;
 using VideoGame.Api.Infrastructure.Support.Auth;
@@ -11,13 +12,12 @@ using VideoGame.Api.Infrastructure.Support.Auth;
 namespace VideoGame.Api.Application.Services.Auth;
 
 public class LoginService(
-    VideoGameDbContext context,
+    IUnitOfWork unitOfWork,
     ITokenGenerator tokenGenerator) : ILoginService
 {
     public async Task<TokenDto?> LoginAsync(UserForm form)
     {
-        var user = await context.Users.Include(u => u.Role).SingleOrDefaultAsync(
-            u => u.Username == form.Username);
+        var user = await unitOfWork.Users.GetUserWithRoleAsync(form.Username);
 
         if (user is null)
         {
