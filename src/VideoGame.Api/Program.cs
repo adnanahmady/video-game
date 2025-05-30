@@ -4,9 +4,9 @@ using FluentValidation.AspNetCore;
 
 using Scalar.AspNetCore;
 
-using VideoGame.Api.Core;
-using VideoGame.Api.Infrastructure;
 using VideoGame.Api.Settings;
+using VideoGame.Application;
+using VideoGame.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,9 +22,11 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddAutoMapper(typeof(Program));
 
-DatabaseServiceRegisters.AddServices(builder);
+
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(
+    builder.Configuration["ConnectionStrings:Default"]!);
 AuthServiceRegisters.AddServices(builder.Configuration, builder.Services);
-AppSupportRegisters.AddServices(builder.Services);
 FormValidatorRegisters.AddServices(builder.Services);
 ServiceWorkRegisters.AddServices(builder.Services);
 

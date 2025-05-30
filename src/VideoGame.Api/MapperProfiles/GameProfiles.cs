@@ -1,7 +1,7 @@
 using AutoMapper;
 
-using VideoGame.Api.Core.Entities;
-using VideoGame.Api.Infrastructure.RequestForms.Games;
+using VideoGame.Api.RequestForms.Games;
+using VideoGame.Application.Dtos.Games;
 
 namespace VideoGame.Api.MapperProfiles;
 
@@ -9,9 +9,7 @@ public class GameProfiles : Profile
 {
     public GameProfiles()
     {
-        CreateMap<CreateGameForm, Game>()
-            .ForMember(g => g.Id, opt => opt.Ignore());
-        CreateMap<UpdateGameForm, Game>()
-            .ForMember(g => g.Id, opt => opt.Ignore());
+        CreateMap<CreateGameForm, GameDto>();
+        CreateMap<UpdateGameForm, GameDto>();
     }
 }

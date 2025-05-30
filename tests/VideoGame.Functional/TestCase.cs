@@ -1,5 +1,5 @@
-using VideoGame.Api.Core;
 using VideoGame.Functional.Support;
+using VideoGame.Infrastructure;
 
 using Xunit.Abstractions;
 

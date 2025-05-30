@@ -1,7 +1,7 @@
-using VideoGame.Api.Application.Services.Auth;
-using VideoGame.Api.Application.Services.Games;
-using VideoGame.Api.Infrastructure.Services.Auth;
-using VideoGame.Api.Infrastructure.Services.Games;
+using VideoGame.Application.Interfaces.Services.Auth;
+using VideoGame.Application.Interfaces.Services.Games;
+using VideoGame.Application.Services.Auth;
+using VideoGame.Application.Services.Games;
 
 namespace VideoGame.Api.Settings;
 

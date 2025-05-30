@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-using VideoGame.Api.Core;
+using VideoGame.Infrastructure;
 
 namespace VideoGame.Functional.Support;
 

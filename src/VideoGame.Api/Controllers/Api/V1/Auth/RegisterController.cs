@@ -1,22 +1,25 @@
+using AutoMapper;
+
 using Microsoft.AspNetCore.Mvc;
 
-using VideoGame.Api.Core.Dtos.Auth;
-using VideoGame.Api.Infrastructure.RequestForms.Auth;
-using VideoGame.Api.Infrastructure.Responses.Shared;
-using VideoGame.Api.Infrastructure.Services.Auth;
-using VideoGame.Api.Infrastructure.Support;
+using VideoGame.Api.RequestForms.Auth;
+using VideoGame.Api.Responses.Shared;
+using VideoGame.Api.Support;
+using VideoGame.Application.Dtos.Auth;
+using VideoGame.Application.Interfaces.Services.Auth;
 
 namespace VideoGame.Api.Controllers.Api.V1.Auth;
 
 [Tags("Auth")]
 [Route("api/v1")]
 [ApiController]
-public class RegisterController(IAuthWork authWork) : ControllerBase
+public class RegisterController(IAuthWork authWork, IMapper mapper) : ControllerBase
 {
     [HttpPost("register")]
     public async Task<ActionResult> Register(UserForm form)
     {
-        var user = await authWork.RegisterService.RegisterAsync(form);
+        var dto = mapper.Map<UserDto>(form);
+        var user = await authWork.RegisterService.RegisterAsync(dto);
 
         if (user is null)
         {

@@ -4,7 +4,7 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Api.Core.Entities;
+using VideoGame.Domain.Entities;
 using VideoGame.Functional.Factories;
 using VideoGame.Functional.Support;
 

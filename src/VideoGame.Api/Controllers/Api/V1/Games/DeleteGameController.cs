@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using VideoGame.Api.Core.Entities;
-using VideoGame.Api.Infrastructure.Services.Games;
+using VideoGame.Application.Interfaces.Services.Games;
+using VideoGame.Domain.Entities;
 
 namespace VideoGame.Api.Controllers.Api.V1.Games;
 

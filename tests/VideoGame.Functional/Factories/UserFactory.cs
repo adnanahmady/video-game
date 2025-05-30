@@ -2,7 +2,7 @@ using Bogus;
 
 using Microsoft.AspNetCore.Identity;
 
-using VideoGame.Api.Core.Entities;
+using VideoGame.Domain.Entities;
 
 namespace VideoGame.Functional.Factories;
 

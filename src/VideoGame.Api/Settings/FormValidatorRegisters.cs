@@ -1,9 +1,9 @@
 using FluentValidation;
 
-using VideoGame.Api.Infrastructure.RequestForms.Auth;
-using VideoGame.Api.Infrastructure.RequestForms.Games;
-using VideoGame.Api.Infrastructure.Validators.Auth;
-using VideoGame.Api.Infrastructure.Validators.Games;
+using VideoGame.Api.RequestForms.Auth;
+using VideoGame.Api.RequestForms.Games;
+using VideoGame.Api.Validators.Auth;
+using VideoGame.Api.Validators.Games;
 
 namespace VideoGame.Api.Settings;
 
