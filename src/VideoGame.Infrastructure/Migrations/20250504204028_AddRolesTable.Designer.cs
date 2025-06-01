@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 using VideoGame.Infrastructure;
+using VideoGame.Infrastructure.Modules.Shared;
 
 #nullable disable
 

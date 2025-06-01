@@ -1,6 +1,6 @@
 using Bogus;
 
-using VideoGame.Domain.Entities;
+using VideoGame.Domain.Modules.Games.Entities;
 
 namespace VideoGame.Functional.Factories;
 
