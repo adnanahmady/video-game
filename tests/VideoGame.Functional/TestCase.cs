@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using VideoGame.Domain.Modules.Auth.Entities;
 using VideoGame.Domain.Modules.Auth.Interfaces.Support.Auth;
-using VideoGame.Functional.Factories;
+using VideoGame.Functional.Modules.Auth.Factories;
 using VideoGame.Functional.Support;
 using VideoGame.Infrastructure;
 

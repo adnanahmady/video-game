@@ -4,12 +4,12 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Functional.Factories;
+using VideoGame.Functional.Modules.Games.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
 
-namespace VideoGame.Functional.V1.Games;
+namespace VideoGame.Functional.Modules.Games.Api.V1;
 
 public class FindGameByIdTests(
     TestableWebApplicationFactory factory,

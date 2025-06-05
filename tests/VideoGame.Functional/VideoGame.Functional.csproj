@@ -38,4 +38,10 @@
     <ProjectReference Include="..\..\src\VideoGame.Infrastructure\VideoGame.Infrastructure.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Modules\Auth\Api\" />
+    <Folder Include="Modules\Games\Api\" />
+  </ItemGroup>
+
 </Project>

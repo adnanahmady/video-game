@@ -2,7 +2,7 @@ using Bogus;
 
 using VideoGame.Domain.Modules.Auth.Entities;
 
-namespace VideoGame.Functional.Factories;
+namespace VideoGame.Functional.Modules.Auth.Factories;
 
 public static class RoleFactory
 {

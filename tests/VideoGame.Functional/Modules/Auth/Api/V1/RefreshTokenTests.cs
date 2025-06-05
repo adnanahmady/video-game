@@ -4,14 +4,15 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Functional.Factories;
+using VideoGame.Domain.Modules.Auth.Entities;
+using VideoGame.Functional.Modules.Auth.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
 
-namespace VideoGame.Functional.V1.Auth;
+namespace VideoGame.Functional.Modules.Auth.Api.V1;
 
-public class LoginTests(
+public class RefreshTokenTests(
     TestableWebApplicationFactory factory,
     ITestOutputHelper output) : TestCase(factory, output)
 {
@@ -19,45 +20,54 @@ public class LoginTests(
     {
         yield return
         [
-            new { username = "user", password = "pass" },
-            "Password",
-            "Password must be at least 6 characters long."
+            new Func<User, object>(user => new
+            {
+                user_id = user.Id,
+                refresh_token = "pass"
+            }),
+            "RefreshToken",
+            "Refresh token is invalid or expired."
         ];
 
         yield return
         [
-            new { username = "us", password = "SecretPassword" },
-            "Username",
-            "Username must be between 3 and 60 characters long."
+            new Func<User, object>(user => new
+            {
+                user_id = Guid.NewGuid().ToString(),
+                refresh_token = user.RefreshToken
+            }),
+            "UserId",
+            "Refresh token is invalid or expired."
         ];
 
         yield return
         [
-            new { password = "SecretPassword" },
-            "Username",
-            "Username is required."
+            new Func<User, object>(user => new { refresh_token = user.RefreshToken }),
+            "UserId",
+            "UserId is required."
         ];
 
         yield return
         [
-            new { username = "John due" },
-            "Password",
-            "Password is required."
+            new Func<User, object>(user => new { user_id = user.Id }),
+            "RefreshToken",
+            "RefreshToken is required."
         ];
     }
 
     [Theory]
     [MemberData(nameof(DataProviderForDataValidation))]
-    public async Task GivenInvalidDataWhenLoginThenShouldReturnErrors(
-        object data,
+    public async Task GivenInvalidDataWhenRefreshingThenShouldReturnErrors(
+        Func<User, object> fn,
         string field,
         string message)
     {
-        var url = @"api/v1/login";
+        var url = @"api/v1/tokens/refresh";
         var user = UserFactory.Create("John due", "SecretPassword");
         user.Role = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
+        var data = fn(user);
 
         var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
@@ -69,17 +79,17 @@ public class LoginTests(
     }
 
     [Fact]
-    public async Task GivenDataWhenLoggedInThenReturnNewToken()
+    public async Task GivenDataWhenRefreshedThenShouldHaveExpectedFields()
     {
-        var url = @"api/v1/login";
+        var url = @"api/v1/tokens/refresh";
         var user = UserFactory.Create("John due", "SecretPassword");
         user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
         var data = new
         {
-            username = "John due",
-            password = "SecretPassword"
+            user_id = user.Id,
+            refresh_token = user.RefreshToken
         };
 
         var response = await Client.PostAsJsonAsync(url, data);
@@ -91,17 +101,17 @@ public class LoginTests(
     }
 
     [Fact]
-    public async Task GivenDataWhenLoggedInThenShouldBeOk()
+    public async Task GivenDataWhenRefreshedThenShouldBeOk()
     {
-        var url = @"api/v1/login";
-        var user = UserFactory.Create("John due2", "SecretPassword");
+        var url = @"api/v1/tokens/refresh";
+        var user = UserFactory.Create("John due", "SecretPassword");
         user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
         var data = new
         {
-            username = "John due2",
-            password = "SecretPassword"
+            user_id = user.Id,
+            refresh_token = user.RefreshToken
         };
 
         var response = await Client.PostAsJsonAsync(url, data);

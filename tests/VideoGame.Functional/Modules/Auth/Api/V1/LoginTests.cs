@@ -2,17 +2,16 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
-using Microsoft.EntityFrameworkCore;
-
 using Shouldly;
 
+using VideoGame.Functional.Modules.Auth.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
 
-namespace VideoGame.Functional.V1.Auth;
+namespace VideoGame.Functional.Modules.Auth.Api.V1;
 
-public class RegisterTests(
+public class LoginTests(
     TestableWebApplicationFactory factory,
     ITestOutputHelper output) : TestCase(factory, output)
 {
@@ -49,12 +48,16 @@ public class RegisterTests(
 
     [Theory]
     [MemberData(nameof(DataProviderForDataValidation))]
-    public async Task GivenInvalidDataWhenRegisterThenShouldReturnErrors(
+    public async Task GivenInvalidDataWhenLoginThenShouldReturnErrors(
         object data,
         string field,
         string message)
     {
-        var url = @"api/v1/register";
+        var url = @"api/v1/login";
+        var user = UserFactory.Create("John due", "SecretPassword");
+        user.Role = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
+        Context.Users.Add(user);
+        await Context.SaveChangesAsync();
 
         var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
@@ -66,9 +69,13 @@ public class RegisterTests(
     }
 
     [Fact]
-    public async Task GivenDataWhenRegisteredThenReturnExpectedFields()
+    public async Task GivenDataWhenLoggedInThenReturnNewToken()
     {
-        var url = @"api/v1/register";
+        var url = @"api/v1/login";
+        var user = UserFactory.Create("John due", "SecretPassword");
+        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
+        Context.Users.Add(user);
+        await Context.SaveChangesAsync();
         var data = new
         {
             username = "John due",
@@ -79,22 +86,26 @@ public class RegisterTests(
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
-        dataSection.GetProperty("id").GetString().ShouldNotBeNullOrWhiteSpace();
-        dataSection.GetProperty("username").GetString().ShouldBe(data.username);
+        dataSection.GetProperty("access_token").GetString().ShouldNotBeNullOrWhiteSpace();
+        dataSection.GetProperty("refresh_token").GetString().ShouldNotBeNullOrWhiteSpace();
     }
 
     [Fact]
-    public async Task GivenUsernameAndPasswordWhenCalledThenShouldRegister()
+    public async Task GivenDataWhenLoggedInThenShouldBeOk()
     {
-        var url = @"api/v1/register";
+        var url = @"api/v1/login";
+        var user = UserFactory.Create("John due2", "SecretPassword");
+        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
+        Context.Users.Add(user);
+        await Context.SaveChangesAsync();
         var data = new
         {
-            username = "John due 2",
+            username = "John due2",
             password = "SecretPassword"
         };
 
         var response = await Client.PostAsJsonAsync(url, data);
 
-        response.StatusCode.ShouldBe(HttpStatusCode.Created);
+        response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }
 }
