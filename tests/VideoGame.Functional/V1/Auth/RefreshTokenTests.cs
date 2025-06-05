@@ -69,7 +69,7 @@ public class RefreshTokenTests(
         await Context.SaveChangesAsync();
         var data = fn(user);
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var errors = content.GetProperty("errors")
             .GetProperty(field).EnumerateArray();
@@ -92,7 +92,7 @@ public class RefreshTokenTests(
             refresh_token = user.RefreshToken
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
@@ -114,7 +114,7 @@ public class RefreshTokenTests(
             refresh_token = user.RefreshToken
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

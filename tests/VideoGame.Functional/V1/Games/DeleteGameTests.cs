@@ -16,9 +16,10 @@ public class DeleteGameTests(
     [Fact]
     public async Task GivenRouteWhenVideoDoesntExistThenShouldBeNotFound()
     {
+        await LoginWithRoleAsync("Admin");
         var url = @"api/v1/games/9999999999999999";
 
-        var response = await AdminClient.DeleteAsync(url);
+        var response = await Client.DeleteAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
@@ -26,12 +27,13 @@ public class DeleteGameTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
+        await LoginWithRoleAsync("Admin");
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
         var url = @"api/v1/games/" + game.Id;
 
-        var response = await AdminClient.DeleteAsync(url);
+        var response = await Client.DeleteAsync(url);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
     }

@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
+using VideoGame.Domain.Modules.Auth.Entities;
+using VideoGame.Domain.Modules.Auth.Interfaces.Support.Auth;
+using VideoGame.Functional.Factories;
 using VideoGame.Functional.Support;
 using VideoGame.Infrastructure;
 
@@ -5,22 +10,42 @@ using Xunit.Abstractions;
 
 namespace VideoGame.Functional;
 
-public class TestCase : IClassFixture<TestableWebApplicationFactory>
+public abstract class TestCase : IClassFixture<TestableWebApplicationFactory>
 {
     protected Action<string> Dump;
     protected readonly VideoGameDbContext Context;
 
-    protected readonly HttpClient Guest;
     protected readonly HttpClient Client;
-    protected readonly HttpClient AdminClient;
+    private readonly TestableWebApplicationFactory _factory;
+
     protected TestCase(
         TestableWebApplicationFactory factory,
         ITestOutputHelper output)
     {
-        Guest = factory.CreateClient();
-        Client = factory.Authenticate("User").CreateClient();
-        AdminClient = factory.Authenticate("Admin").CreateClient();
+        _factory = factory;
+        Context = factory.Resolve<VideoGameDbContext>();
+        Client = factory.CreateClient();
         Dump = output.WriteLine;
-        Context = factory.GetDbContext<VideoGameDbContext>();
+    }
+
+    protected async Task<User> LoginAsync(User? user = null)
+    {
+        user ??= UserFactory.Create();
+        await Context.Users.AddAsync(user);
+        await Context.SaveChangesAsync();
+        var token = _factory.Resolve<ITokenGenerator>().CreateToken(user);
+        Client.DefaultRequestHeaders.Authorization = new("Bearer", token);
+
+        return user;
+    }
+
+    protected async Task<User> LoginWithRoleAsync(string roleName)
+    {
+        var role = await Context.Roles.FirstAsync(r => r.Name == roleName);
+        var user = UserFactory.Create();
+        user.RoleId = role.Id;
+        await LoginAsync(user);
+
+        return user;
     }
 }

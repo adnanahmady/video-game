@@ -6,8 +6,12 @@ namespace VideoGame.Infrastructure.Modules.Auth.Support;
 
 public class UserService(IUnitOfWork unitOfWork) : IUserService
 {
-    public async Task<User?> FindByIdAsync(Guid id) =>
-        await unitOfWork.Users.FindByIdAsync(id);
+    public async Task<User?> FindByIdAsync(Guid id)
+    {
+        var user = await unitOfWork.Users.FindByIdAsync(id);
+
+        return user;
+    }
 
     public async Task<string?> GetRoleAsync(User user)
     {

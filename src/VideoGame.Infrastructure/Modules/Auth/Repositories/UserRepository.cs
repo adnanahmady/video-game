@@ -12,6 +12,8 @@ public class UserRepository(DbContext context)
     private VideoGameDbContext _context => (Context as VideoGameDbContext)!;
 
     public async Task<User?> GetUserWithRoleAsync(string username) =>
-        await _context.Users.Include(u => u!.Role)
-            .SingleOrDefaultAsync(u => u!.Username == username);
+        await _context.Users
+            .Include(u => u.Role)
+            .OrderBy(u => u.Username)
+            .FirstOrDefaultAsync(u => u!.Username == username);
 }

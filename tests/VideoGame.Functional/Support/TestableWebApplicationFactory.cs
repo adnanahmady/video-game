@@ -26,7 +26,7 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
         });
     }
 
-    public T GetDbContext<T>() where T : DbContext => Services
+    public T Resolve<T>() where T : class => Services
         .CreateScope().ServiceProvider.GetRequiredService<T>();
 
     private void RemoveExistingDbContext(IServiceCollection services)
@@ -66,14 +66,4 @@ public class TestableWebApplicationFactory : WebApplicationFactory<Program>
     private void LoadTestSettingFile(IWebHostBuilder builder) =>
         builder.ConfigureAppConfiguration((c, config) => config.AddJsonFile(
             "appsettings.Testing.json", optional: false, reloadOnChange: true));
-
-    public WebApplicationFactory<Program> Authenticate(string role) =>
-        WithWebHostBuilder(builder => builder.ConfigureServices(services => services
-            .AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = "Test";
-                options.DefaultChallengeScheme = "Test";
-            }).AddScheme<TestAuthOptions, TestAuthHandler>(
-                "Test",
-                o => o.Role = role)));
 }

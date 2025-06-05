@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
 
+using Microsoft.EntityFrameworkCore;
+
 using Shouldly;
 
 using VideoGame.Functional.Support;
@@ -54,7 +56,7 @@ public class RegisterTests(
     {
         var url = @"api/v1/register";
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var errors = content.GetProperty("errors")
             .GetProperty(field).EnumerateArray();
@@ -73,7 +75,7 @@ public class RegisterTests(
             password = "SecretPassword"
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
@@ -87,11 +89,11 @@ public class RegisterTests(
         var url = @"api/v1/register";
         var data = new
         {
-            username = "John due",
+            username = "John due 2",
             password = "SecretPassword"
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }

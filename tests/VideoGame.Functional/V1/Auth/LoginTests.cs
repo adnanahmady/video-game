@@ -59,7 +59,7 @@ public class LoginTests(
         Context.Users.Add(user);
         await Context.SaveChangesAsync();
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var errors = content.GetProperty("errors")
             .GetProperty(field).EnumerateArray();
@@ -82,7 +82,7 @@ public class LoginTests(
             password = "SecretPassword"
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
@@ -104,7 +104,7 @@ public class LoginTests(
             password = "SecretPassword"
         };
 
-        var response = await Guest.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

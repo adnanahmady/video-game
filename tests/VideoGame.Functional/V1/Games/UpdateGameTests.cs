@@ -18,6 +18,7 @@ public class UpdateGameTests(
     [Fact]
     public async Task GivenDataWhenCalledThenShouldReturnExpectedResponse()
     {
+        await LoginWithRoleAsync("Admin");
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
@@ -30,7 +31,7 @@ public class UpdateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await AdminClient.PutAsJsonAsync(url, data);
+        var response = await Client.PutAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
@@ -43,6 +44,7 @@ public class UpdateGameTests(
     [Fact]
     public async Task GivenGameWhenDoesntExistThenShouldBeNotFound()
     {
+        await LoginWithRoleAsync("Admin");
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
@@ -55,7 +57,7 @@ public class UpdateGameTests(
             publisher = game.Publisher
         };
 
-        var response = await AdminClient.PutAsJsonAsync(url, data);
+        var response = await Client.PutAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
     }
@@ -63,6 +65,7 @@ public class UpdateGameTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
+        await LoginWithRoleAsync("Admin");
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
@@ -75,7 +78,7 @@ public class UpdateGameTests(
             publisher = game.Publisher
         };
 
-        var response = await AdminClient.PutAsJsonAsync(url, data);
+        var response = await Client.PutAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.OK);
     }

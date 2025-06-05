@@ -21,6 +21,7 @@ public class ListGamesTests(
     public async Task GivenPaginationParametersWhenCalledThenResponseShouldBeAsExpected()
     {
         // Arrange
+        await LoginAsync();
         await Context.Games.ExecuteDeleteAsync();
         var games = GameFactory.CreateMany(4);
         Context.Games.AddRange(games);
@@ -47,6 +48,7 @@ public class ListGamesTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenResponseShouldBeAsExpected()
     {
+        await LoginAsync();
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
@@ -65,6 +67,7 @@ public class ListGamesTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
+        await LoginAsync();
         var url = @"api/v1/games";
 
         var response = await Client.GetAsync(url);

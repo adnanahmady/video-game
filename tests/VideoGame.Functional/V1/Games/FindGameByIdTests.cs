@@ -18,6 +18,7 @@ public class FindGameByIdTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenResponseShouldBeAsExpected()
     {
+        await LoginAsync();
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();
@@ -36,6 +37,7 @@ public class FindGameByIdTests(
     [Fact]
     public async Task GivenRouteWhenVideoDoesntExistThenShouldBeNotFound()
     {
+        await LoginAsync();
         var url = @"api/v1/games/9999999999999999";
 
         var response = await Client.GetAsync(url);
@@ -46,6 +48,7 @@ public class FindGameByIdTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
+        await LoginAsync();
         var game = GameFactory.Create();
         Context.Games.Add(game);
         await Context.SaveChangesAsync();

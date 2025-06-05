@@ -12,11 +12,13 @@ namespace VideoGame.Functional.V1.Games;
 
 public class CreateGameTests(
     TestableWebApplicationFactory factory,
-    ITestOutputHelper output) : TestCase(factory, output)
+    ITestOutputHelper output)
+    : TestCase(factory, output)
 {
     [Fact]
     public async Task GivenDataWhenCalledThenShouldReturnExpectedResponse()
     {
+        await LoginWithRoleAsync("Admin");
         var url = @"api/v1/games";
         var data = new
         {
@@ -26,7 +28,7 @@ public class CreateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await AdminClient.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var dataSection = content.GetProperty("data");
 
@@ -40,6 +42,7 @@ public class CreateGameTests(
     [Fact]
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
+        await LoginWithRoleAsync("Admin");
         var url = @"api/v1/games";
         var data = new
         {
@@ -49,7 +52,7 @@ public class CreateGameTests(
             publisher = "John Doe"
         };
 
-        var response = await AdminClient.PostAsJsonAsync(url, data);
+        var response = await Client.PostAsJsonAsync(url, data);
 
         response.StatusCode.ShouldBe(HttpStatusCode.Created);
     }
