@@ -4,7 +4,6 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Functional.Modules.Games.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
@@ -19,9 +18,7 @@ public class FindGameByIdTests(
     public async Task GivenRouteWhenCalledThenResponseShouldBeAsExpected()
     {
         await LoginAsync();
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games/" + game.Id;
 
         var response = await Client.GetFromJsonAsync<JsonElement>(url);
@@ -49,9 +46,7 @@ public class FindGameByIdTests(
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
         await LoginAsync();
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games/" + game.Id;
 
         var response = await Client.GetAsync(url);

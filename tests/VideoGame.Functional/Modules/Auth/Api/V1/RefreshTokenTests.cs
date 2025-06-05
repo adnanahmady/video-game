@@ -5,7 +5,6 @@ using System.Text.Json;
 using Shouldly;
 
 using VideoGame.Domain.Modules.Auth.Entities;
-using VideoGame.Functional.Modules.Auth.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
@@ -63,10 +62,7 @@ public class RefreshTokenTests(
         string message)
     {
         var url = @"api/v1/tokens/refresh";
-        var user = UserFactory.Create("John due", "SecretPassword");
-        user.Role = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
+        var user = await CreateUserAsync(username: "John due", roleName: "Admin");
         var data = fn(user);
 
         var response = await Client.PostAsJsonAsync(url, data);
@@ -82,10 +78,7 @@ public class RefreshTokenTests(
     public async Task GivenDataWhenRefreshedThenShouldHaveExpectedFields()
     {
         var url = @"api/v1/tokens/refresh";
-        var user = UserFactory.Create("John due", "SecretPassword");
-        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
+        var user = await CreateUserAsync(username: "John due", roleName: "User");
         var data = new
         {
             user_id = user.Id,
@@ -104,10 +97,7 @@ public class RefreshTokenTests(
     public async Task GivenDataWhenRefreshedThenShouldBeOk()
     {
         var url = @"api/v1/tokens/refresh";
-        var user = UserFactory.Create("John due", "SecretPassword");
-        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
+        var user = await CreateUserAsync(username: "John due", roleName: "User");
         var data = new
         {
             user_id = user.Id,

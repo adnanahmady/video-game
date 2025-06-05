@@ -49,9 +49,7 @@ public class ListGamesTests(
     public async Task GivenRouteWhenCalledThenResponseShouldBeAsExpected()
     {
         await LoginAsync();
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games";
 
         var response = await Client.GetFromJsonAsync<JsonElement>(url);

@@ -4,7 +4,6 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Functional.Modules.Auth.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
@@ -54,11 +53,7 @@ public class LoginTests(
         string message)
     {
         var url = @"api/v1/login";
-        var user = UserFactory.Create("John due", "SecretPassword");
-        user.Role = Context.Roles.FirstOrDefault(r => r.Name == "Admin");
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
-
+        await CreateUserAsync(roleName: "Admin");
         var response = await Client.PostAsJsonAsync(url, data);
         var content = await response.Content.ReadFromJsonAsync<JsonElement>();
         var errors = content.GetProperty("errors")
@@ -72,13 +67,10 @@ public class LoginTests(
     public async Task GivenDataWhenLoggedInThenReturnNewToken()
     {
         var url = @"api/v1/login";
-        var user = UserFactory.Create("John due", "SecretPassword");
-        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
+        await CreateUserAsync(roleName: "User");
         var data = new
         {
-            username = "John due",
+            username = "John Doe",
             password = "SecretPassword"
         };
 
@@ -94,13 +86,10 @@ public class LoginTests(
     public async Task GivenDataWhenLoggedInThenShouldBeOk()
     {
         var url = @"api/v1/login";
-        var user = UserFactory.Create("John due2", "SecretPassword");
-        user.RoleId = Context.Roles.FirstOrDefault(r => r.Name == "User")!.Id;
-        Context.Users.Add(user);
-        await Context.SaveChangesAsync();
+        await CreateUserAsync(username: "john doe 2", roleName: "User");
         var data = new
         {
-            username = "John due2",
+            username = "john doe 2",
             password = "SecretPassword"
         };
 

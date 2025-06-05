@@ -30,7 +30,7 @@ public static class DependencyInjection
     }
 
     private static void AddTokenHandler(
-        this IServiceCollection services,
+        IServiceCollection services,
         IConfiguration configuration) =>
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
@@ -49,7 +49,7 @@ public static class DependencyInjection
                 };
             });
 
-    private static void AddUnitOfWork(this IServiceCollection services) =>
+    private static void AddUnitOfWork(IServiceCollection services) =>
         services.AddScoped<IAuthWork, AuthWork>();
 
     private static void AddValidators(IServiceCollection services)

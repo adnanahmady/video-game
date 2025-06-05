@@ -4,7 +4,6 @@ using System.Text.Json;
 
 using Shouldly;
 
-using VideoGame.Functional.Modules.Games.Factories;
 using VideoGame.Functional.Support;
 
 using Xunit.Abstractions;
@@ -19,9 +18,7 @@ public class UpdateGameTests(
     public async Task GivenDataWhenCalledThenShouldReturnExpectedResponse()
     {
         await LoginWithRoleAsync("Admin");
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games/" + game.Id;
         var data = new
         {
@@ -45,9 +42,7 @@ public class UpdateGameTests(
     public async Task GivenGameWhenDoesntExistThenShouldBeNotFound()
     {
         await LoginWithRoleAsync("Admin");
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games/99999999999999999";
         var data = new
         {
@@ -66,9 +61,7 @@ public class UpdateGameTests(
     public async Task GivenRouteWhenCalledThenShouldBeOk()
     {
         await LoginWithRoleAsync("Admin");
-        var game = GameFactory.Create();
-        Context.Games.Add(game);
-        await Context.SaveChangesAsync();
+        var game = await CreateGameAsync();
         var url = @"api/v1/games/" + game.Id;
         var data = new
         {

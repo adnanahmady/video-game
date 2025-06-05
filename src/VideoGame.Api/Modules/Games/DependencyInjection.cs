@@ -9,15 +9,13 @@ namespace VideoGame.Api.Modules.Games;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddApiGamesModule(this IServiceCollection services)
+    public static void AddApiGamesModule(this IServiceCollection services)
     {
         AddUnitOfWork(services);
         AddValidators(services);
-
-        return services;
     }
 
-    private static void AddUnitOfWork(this IServiceCollection services) =>
+    private static void AddUnitOfWork(IServiceCollection services) =>
         services.AddScoped<IGameWork, GameWork>();
 
     private static void AddValidators(IServiceCollection services)

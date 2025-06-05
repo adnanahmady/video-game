@@ -10,30 +10,22 @@ using Xunit.Abstractions;
 
 namespace VideoGame.Functional;
 
-public abstract class TestCase : IClassFixture<TestableWebApplicationFactory>
+public abstract class ParentTestCase(
+    TestableWebApplicationFactory factory,
+    ITestOutputHelper output)
+    : IClassFixture<TestableWebApplicationFactory>
 {
-    protected Action<string> Dump;
-    protected readonly VideoGameDbContext Context;
-
-    protected readonly HttpClient Client;
-    private readonly TestableWebApplicationFactory _factory;
-
-    protected TestCase(
-        TestableWebApplicationFactory factory,
-        ITestOutputHelper output)
-    {
-        _factory = factory;
-        Context = factory.Resolve<VideoGameDbContext>();
-        Client = factory.CreateClient();
-        Dump = output.WriteLine;
-    }
+    protected Action<string> Dump = output.WriteLine;
+    protected readonly VideoGameDbContext Context =
+        factory.Resolve<VideoGameDbContext>();
+    protected readonly HttpClient Client = factory.CreateClient();
 
     protected async Task<User> LoginAsync(User? user = null)
     {
         user ??= UserFactory.Create();
         await Context.Users.AddAsync(user);
         await Context.SaveChangesAsync();
-        var token = _factory.Resolve<ITokenGenerator>().CreateToken(user);
+        var token = factory.Resolve<ITokenGenerator>().CreateToken(user);
         Client.DefaultRequestHeaders.Authorization = new("Bearer", token);
 
         return user;
