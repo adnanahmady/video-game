@@ -35,7 +35,6 @@ public class TokenGenerator(
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, user.Role?.Name ?? "")
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

@@ -2,10 +2,12 @@ using System.Text;
 
 using FluentValidation;
 
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
 using VideoGame.Api.Modules.Auth.RequestForms;
+using VideoGame.Api.Modules.Auth.Support;
 using VideoGame.Api.Modules.Auth.Validators;
 using VideoGame.Application.Modules.Auth.Interfaces;
 using VideoGame.Application.Modules.Auth.Services;
@@ -18,6 +20,7 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        services.AddScoped<IClaimsTransformation, CustomClaimsTransformer>();
         AddTokenHandler(services, configuration);
 
         AddUnitOfWork(services);

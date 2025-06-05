@@ -2,6 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using VideoGame.Domain.Modules.Auth.Interfaces.Support.Auth;
 using VideoGame.Domain.Modules.Auth.Interfaces.Support.Hasher;
+using VideoGame.Domain.Modules.Auth.Support;
+using VideoGame.Infrastructure.Modules.Auth.Support;
 using VideoGame.Infrastructure.Modules.Auth.Support.Auth;
 using VideoGame.Infrastructure.Modules.Auth.Support.Hasher;
 
@@ -11,6 +13,7 @@ public static class DependencyInjection
 {
     public static void AddInfrastructureAuthModule(this IServiceCollection services)
     {
+        services.AddScoped<IUserService, UserService>();
         services.AddScoped<ITokenGenerator, TokenGenerator>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
     }

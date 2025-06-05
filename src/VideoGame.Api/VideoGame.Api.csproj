@@ -20,8 +20,4 @@
     <ProjectReference Include="..\VideoGame.Infrastructure\VideoGame.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\Shared\" />
-  </ItemGroup>
-
 </Project>
