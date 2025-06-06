@@ -8,6 +8,7 @@ public interface IUnitOfWork : IDisposable
     IGameRepository Games { get; }
     IUserRepository Users { get; }
     IRoleRepository Roles { get; }
+    IPermissionRepository Permissions { get; }
 
     Task<int> CommitAsync();
 }

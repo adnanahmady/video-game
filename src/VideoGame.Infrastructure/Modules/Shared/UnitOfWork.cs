@@ -11,6 +11,7 @@ public class UnitOfWork(VideoGameDbContext context) : IUnitOfWork
     public IGameRepository Games { get; } = new GameRepository(context);
     public IUserRepository Users { get; } = new UserRepository(context);
     public IRoleRepository Roles { get; } = new RoleRepository(context);
+    public IPermissionRepository Permissions { get; } = new PermissionRepository(context);
 
     public async Task<int> CommitAsync() => await context.SaveChangesAsync();
 
